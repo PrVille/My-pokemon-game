@@ -7,6 +7,9 @@ const canvasHeight = 576
 canvas.width = canvasWidth
 canvas.height = canvasHeight
 
+console.log("hey");
+
+
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) { // map width 70 tiles
   collisionsMap.push(collisions.slice(i, 70 + i))
