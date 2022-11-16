@@ -372,7 +372,7 @@ const gameLoop = (timeStamp) => {
 };
 
 // start game
-//gameLoop();
+gameLoop();
 
 const battleBackgroundImage = new Image();
 battleBackgroundImage.src = "./Images/battleBackground.png";
@@ -423,7 +423,7 @@ const battleLoop = (timeStamp) => {
   if (showFPS) drawFPS(timeStamp);
 };
 
-battleLoop()
+//battleLoop()
 
 //doesnt work if capslock on
 let lastKey = "";
