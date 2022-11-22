@@ -1,62 +1,62 @@
 /**
  * https://www.youtube.com/watch?v=yP5DKzriqXA
- * 4:54:40
+ * 5:56:04
  */
 
-canvas = document.querySelector("canvas");
-c = canvas.getContext("2d");
+canvas = document.querySelector("canvas")
+c = canvas.getContext("2d")
 
-const canvasWidth = 1024;
-const canvasHeight = 576;
+const canvasWidth = 1024
+const canvasHeight = 576
 
-canvas.width = canvasWidth;
-canvas.height = canvasHeight;
+canvas.width = canvasWidth
+canvas.height = canvasHeight
 
-const collisionsMap = [];
+const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
   // map width 70 tiles
-  collisionsMap.push(collisions.slice(i, 70 + i));
+  collisionsMap.push(collisions.slice(i, 70 + i))
 }
 
-const battleZonesMap = [];
+const battleZonesMap = []
 for (let i = 0; i < battleZonesData.length; i += 70) {
   // map width 70 tiles
-  battleZonesMap.push(battleZonesData.slice(i, 70 + i));
+  battleZonesMap.push(battleZonesData.slice(i, 70 + i))
 }
 
-const mapImage = new Image();
-mapImage.src = "./Images/pelletTown.png";
+const mapImage = new Image()
+mapImage.src = "./Images/pelletTown.png"
 
-const foregroundImage = new Image();
-foregroundImage.src = "./Images/foreground.png";
+const foregroundImage = new Image()
+foregroundImage.src = "./Images/foreground.png"
 
-const playerImage = new Image();
-playerImage.src = "./Images/playerDown.png";
+const playerImage = new Image()
+playerImage.src = "./Images/playerDown.png"
 
-const playerUpImage = new Image();
-playerUpImage.src = "./Images/playerUp.png";
+const playerUpImage = new Image()
+playerUpImage.src = "./Images/playerUp.png"
 
-const playerDownImage = new Image();
-playerDownImage.src = "./Images/playerDown.png";
+const playerDownImage = new Image()
+playerDownImage.src = "./Images/playerDown.png"
 
-const playerLeftImage = new Image();
-playerLeftImage.src = "./Images/playerLeft.png";
+const playerLeftImage = new Image()
+playerLeftImage.src = "./Images/playerLeft.png"
 
-const playerRightImage = new Image();
-playerRightImage.src = "./Images/playerRight.png";
+const playerRightImage = new Image()
+playerRightImage.src = "./Images/playerRight.png"
 
-const playerSpeed = 3;
+const playerSpeed = 3
 
 const offset = {
   x: -735,
   y: -650,
-};
+}
 
 const playerDimensions = {
   //static value of img
   width: 192,
   height: 68,
-};
+}
 
 const background = new Sprite({
   position: {
@@ -64,7 +64,7 @@ const background = new Sprite({
     y: offset.y,
   },
   image: mapImage,
-});
+})
 
 const foreground = new Sprite({
   position: {
@@ -72,7 +72,7 @@ const foreground = new Sprite({
     y: offset.y,
   },
   image: foregroundImage,
-});
+})
 
 const player = new Sprite({
   position: {
@@ -82,7 +82,7 @@ const player = new Sprite({
   image: playerDownImage,
   frames: {
     max: 4,
-    hold: 10
+    hold: 10,
   },
   sprites: {
     up: playerUpImage,
@@ -90,7 +90,7 @@ const player = new Sprite({
     right: playerRightImage,
     down: playerDownImage,
   },
-});
+})
 
 const keys = {
   w: {
@@ -105,9 +105,9 @@ const keys = {
   d: {
     pressed: false,
   },
-};
+}
 
-const boundaries = [];
+const boundaries = []
 //populate boundaries
 collisionsMap.forEach((row, i) => {
   row.forEach((tile, j) => {
@@ -119,12 +119,12 @@ collisionsMap.forEach((row, i) => {
             y: i * Boundary.height + offset.y,
           },
         })
-      );
+      )
     }
-  });
-});
+  })
+})
 
-const battleZones = [];
+const battleZones = []
 //populate battleZones
 battleZonesMap.forEach((row, i) => {
   row.forEach((tile, j) => {
@@ -136,35 +136,35 @@ battleZonesMap.forEach((row, i) => {
             y: i * Boundary.height + offset.y,
           },
         })
-      );
+      )
     }
-  });
-});
+  })
+})
 
-const movables = [background, ...boundaries, ...battleZones, foreground];
+const movables = [background, ...boundaries, ...battleZones, foreground]
 
 const battle = {
   initiated: false,
-};
+}
 
 //Variables for drawFPS()
-let secondsPassed;
-let oldTimeStamp;
-let fps;
+let secondsPassed
+let oldTimeStamp
+let fps
 
 const drawFPS = (timeStamp) => {
   // Calculate the number of seconds passed since the last frame
-  secondsPassed = (timeStamp - oldTimeStamp) / 1000;
-  oldTimeStamp = timeStamp;
+  secondsPassed = (timeStamp - oldTimeStamp) / 1000
+  oldTimeStamp = timeStamp
 
   // Calculate fps
-  fps = Math.round(1 / secondsPassed);
+  fps = Math.round(1 / secondsPassed)
 
   // Draw number to the screen
-  c.font = "25px Arial";
-  c.fillStyle = "black";
-  c.fillText("FPS: " + fps, 10, 30);
-};
+  c.font = "25px Arial"
+  c.fillStyle = "black"
+  c.fillText("FPS: " + fps, 10, 30)
+}
 
 const rectCollision = ({ rect1, rect2 }) => {
   return (
@@ -172,31 +172,31 @@ const rectCollision = ({ rect1, rect2 }) => {
     rect1.position.x <= rect2.position.x + rect2.width &&
     rect1.position.y <= rect2.position.y + rect2.height - 24 &&
     rect1.position.y + rect1.height >= rect2.position.y
-  );
-};
+  )
+}
 
 const drawBoundaries = () => {
   boundaries.forEach((boundary) => {
-    boundary.draw();
-  });
-};
+    boundary.draw()
+  })
+}
 
 const drawBattleZones = () => {
   battleZones.forEach((tile) => {
-    tile.draw();
-  });
-};
+    tile.draw()
+  })
+}
 
 const update = (animationId) => {
-  let canMove = true;
-  player.animate = false;
+  let canMove = true
+  player.animate = false
 
-  if (battle.initiated) return;
+  if (battle.initiated) return
 
   //if moving check battlezone collision ACTIVATE BATTLE
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
     for (let i = 0; i < battleZones.length; i++) {
-      const battleZone = battleZones[i];
+      const battleZone = battleZones[i]
       const overlappingArea =
         (Math.min(
           player.position.x + player.width,
@@ -207,7 +207,7 @@ const update = (animationId) => {
           player.position.y + player.height,
           battleZone.position.y + battleZone.height
         ) -
-          Math.max(player.position.y, battleZone.position.y));
+          Math.max(player.position.y, battleZone.position.y))
       if (
         rectCollision({
           rect1: player,
@@ -216,9 +216,8 @@ const update = (animationId) => {
         overlappingArea > (player.width * player.height) / 2 &&
         Math.random() < 0.01
       ) {
-        console.log("ACTIVATE BATTLE");
         //deactivate current animation loop
-        this.cancelAnimationFrame(animationId);
+        this.cancelAnimationFrame(animationId)
         //battleActivationAnimation
         gsap.to("#overlappingDiv", {
           opacity: 1,
@@ -231,27 +230,32 @@ const update = (animationId) => {
               duration: 0.4,
               onComplete() {
                 //activate a new animation loop
-                battleLoop();
+                initBattle()
+                battleLoop()
                 gsap.to("#overlappingDiv", {
                   opacity: 0,
                   duration: 0.4,
-                });
-              }
-            });
-            
+                })
+              },
+            })
           },
-        });
-        battle.initiated = true;
-        break;
+        })
+
+        audio.map.stop()
+        audio.initBattle.play()
+        audio.battle.play()
+
+        battle.initiated = true
+        break
       }
     }
   }
 
   if (keys.w.pressed && lastKey === "w") {
-    player.animate = true;
-    player.image = player.sprites.up;
+    player.animate = true
+    player.image = player.sprites.up
     for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
+      const boundary = boundaries[i]
       if (
         rectCollision({
           rect1: player,
@@ -265,19 +269,19 @@ const update = (animationId) => {
           },
         })
       ) {
-        canMove = false;
-        break;
+        canMove = false
+        break
       }
     }
     if (canMove)
       movables.forEach((movable) => {
-        movable.position.y += playerSpeed;
-      });
+        movable.position.y += playerSpeed
+      })
   } else if (keys.a.pressed && lastKey === "a") {
-    player.animate = true;
-    player.image = player.sprites.left;
+    player.animate = true
+    player.image = player.sprites.left
     for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
+      const boundary = boundaries[i]
       if (
         rectCollision({
           rect1: player,
@@ -291,19 +295,19 @@ const update = (animationId) => {
           },
         })
       ) {
-        canMove = false;
-        break;
+        canMove = false
+        break
       }
     }
     if (canMove)
       movables.forEach((movable) => {
-        movable.position.x += playerSpeed;
-      });
+        movable.position.x += playerSpeed
+      })
   } else if (keys.s.pressed && lastKey === "s") {
-    player.animate = true;
-    player.image = player.sprites.down;
+    player.animate = true
+    player.image = player.sprites.down
     for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
+      const boundary = boundaries[i]
       if (
         rectCollision({
           rect1: player,
@@ -317,19 +321,19 @@ const update = (animationId) => {
           },
         })
       ) {
-        canMove = false;
-        break;
+        canMove = false
+        break
       }
     }
     if (canMove)
       movables.forEach((movable) => {
-        movable.position.y -= playerSpeed;
-      });
+        movable.position.y -= playerSpeed
+      })
   } else if (keys.d.pressed && lastKey === "d") {
-    player.animate = true;
-    player.image = player.sprites.right;
+    player.animate = true
+    player.image = player.sprites.right
     for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
+      const boundary = boundaries[i]
       if (
         rectCollision({
           rect1: player,
@@ -343,125 +347,79 @@ const update = (animationId) => {
           },
         })
       ) {
-        canMove = false;
-        break;
+        canMove = false
+        break
       }
     }
     if (canMove)
       movables.forEach((movable) => {
-        movable.position.x -= playerSpeed;
-      });
+        movable.position.x -= playerSpeed
+      })
   }
-};
+}
 
-const showFPS = true;
-const showBoundaries = true;
-const showBattleZones = true;
+const showFPS = false
 
 const gameLoop = (timeStamp) => {
   // Keep requesting new frames
-  const animationId = this.requestAnimationFrame(gameLoop);
+  const animationId = this.requestAnimationFrame(gameLoop)
 
-  update(animationId);
-  background.draw();
-  if (showBoundaries) drawBoundaries();
-  if (showBattleZones) drawBattleZones();
-  if (showFPS) drawFPS(timeStamp);
-  player.draw();
-  foreground.draw();
-};
+  update(animationId)
+  background.draw()
+  drawBoundaries()
+  drawBattleZones()
+  if (showFPS) drawFPS(timeStamp)
+  player.draw()
+  foreground.draw()
+}
 
 // start game
 gameLoop();
 
-const battleBackgroundImage = new Image();
-battleBackgroundImage.src = "./Images/battleBackground.png";
-const battleBackground = new Sprite({
-  position: {
-    x: 0,
-    y: 0,
-  },
-  image: battleBackgroundImage,
-});
-
-const draggleImage = new Image();
-draggleImage.src = "./Images/draggleSprite.png";
-const draggle = new Sprite({
-  position: {
-    x: 800,
-    y: 100
-  },
-  image: draggleImage,
-  frames: {
-    max: 4,
-    hold: 30
-  },
-  animate: true
-})
-
-const embyImage = new Image();
-embyImage.src = "./Images/embySprite.png";
-const emby = new Sprite({
-  position: {
-    x: 285,
-    y: 325
-  },
-  image: embyImage,
-  frames: {
-    max: 4,
-    hold: 30
-  },
-  animate: true
-})
-
-const battleLoop = (timeStamp) => {
-  this.requestAnimationFrame(battleLoop);
-  battleBackground.draw()
-  draggle.draw()
-  emby.draw()
-
-  if (showFPS) drawFPS(timeStamp);
-};
-
-//battleLoop()
-
 //doesnt work if capslock on
-let lastKey = "";
+let lastKey = ""
 this.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "w":
-      keys.w.pressed = true;
-      lastKey = "w";
-      break;
+      keys.w.pressed = true
+      lastKey = "w"
+      break
     case "a":
-      keys.a.pressed = true;
-      lastKey = "a";
-      break;
+      keys.a.pressed = true
+      lastKey = "a"
+      break
     case "s":
-      keys.s.pressed = true;
-      lastKey = "s";
-      break;
+      keys.s.pressed = true
+      lastKey = "s"
+      break
     case "d":
-      keys.d.pressed = true;
-      lastKey = "d";
-      break;
+      keys.d.pressed = true
+      lastKey = "d"
+      break
   }
-  //console.log(keys);
-});
+})
 
 this.addEventListener("keyup", (e) => {
   switch (e.key) {
     case "w":
-      keys.w.pressed = false;
-      break;
+      keys.w.pressed = false
+      break
     case "a":
-      keys.a.pressed = false;
-      break;
+      keys.a.pressed = false
+      break
     case "s":
-      keys.s.pressed = false;
-      break;
+      keys.s.pressed = false
+      break
     case "d":
-      keys.d.pressed = false;
-      break;
+      keys.d.pressed = false
+      break
   }
-});
+})
+
+let clicked = false
+addEventListener('click', () => {
+  if (!clicked) {
+    audio.map.play()
+    clicked = true
+  }
+})
