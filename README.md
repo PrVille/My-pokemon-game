@@ -1,5 +1,5 @@
 # PrVille.github.io
-https://prville.github.io/
+https://prville.github.io/My-pokemon-game/
 
-Refactor:
-Overlapping area to a function (rect1, rect2)
+WASD to move
+Ps. try moving over darker grass patches
